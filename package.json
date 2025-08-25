@@ -1,0 +1,24 @@
+{
+  "name": "vetra-vsl",
+  "version": "1.0.0",
+  "description": "Memecoin Trading Community VSL Landing Page",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/",
+    "start": "live-server --port=3000 --open=/",
+    "build": "echo 'Static site - no build required'",
+    "preview": "live-server --port=3000 --open=/"
+  },
+  "keywords": [
+    "vsl",
+    "landing-page",
+    "memecoin",
+    "trading",
+    "community"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+} 

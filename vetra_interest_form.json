@@ -1,0 +1,108 @@
+{
+  "info": {
+    "title": "VETRA Elite Trading Community - Interest Form",
+    "description": "Join the most exclusive memecoin trading community on the planet. Limited spots available.",
+    "documentTitle": "VETRA Elite Interest Form",
+    "collectEmail": false,
+    "requireLogin": false,
+    "allowFileUpload": false,
+    "shuffleQuestions": false,
+    "quiz": false,
+    "confirmationMessage": "Thank you for your interest in VETRA Elite! We'll contact you on Telegram soon.",
+    "customTheme": {
+      "backgroundColor": "#1a1a1a",
+      "color": "#ffffff"
+    }
+  },
+  "item": [
+    {
+      "itemId": "00000001",
+      "title": "Telegram ID *",
+      "questionItem": {
+        "question": {
+          "questionId": "00000001",
+          "required": true,
+          "rowQuestion": {
+            "title": "Please enter your Telegram username (e.g., @username)"
+          }
+        }
+      }
+    },
+    {
+      "itemId": "00000002",
+      "title": "How did you hear about VETRA Elite?",
+      "questionItem": {
+        "question": {
+          "questionId": "00000002",
+          "required": false,
+          "choiceQuestion": {
+            "type": "RADIO",
+            "options": [
+              "Social Media (Twitter/X)",
+              "YouTube",
+              "Telegram",
+              "Friend Referral",
+              "Discord",
+              "Other"
+            ],
+            "shuffle": false
+          }
+        }
+      }
+    },
+    {
+      "itemId": "00000003",
+      "title": "Your Trading Experience Level",
+      "questionItem": {
+        "question": {
+          "questionId": "00000003",
+          "required": false,
+          "choiceQuestion": {
+            "type": "RADIO",
+            "options": [
+              "Complete Beginner",
+              "Some Experience",
+              "Experienced Trader",
+              "Professional Trader"
+            ],
+            "shuffle": false
+          }
+        }
+      }
+    },
+    {
+      "itemId": "00000004",
+      "title": "What interests you most about VETRA Elite?",
+      "questionItem": {
+        "question": {
+          "questionId": "00000004",
+          "required": false,
+          "textQuestion": {
+            "paragraph": true
+          }
+        }
+      }
+    },
+    {
+      "itemId": "00000005",
+      "title": "Preferred Contact Time",
+      "questionItem": {
+        "question": {
+          "questionId": "00000005",
+          "required": false,
+          "choiceQuestion": {
+            "type": "RADIO",
+            "options": [
+              "Morning (9 AM - 12 PM)",
+              "Afternoon (12 PM - 5 PM)",
+              "Evening (5 PM - 9 PM)",
+              "Late Night (9 PM - 12 AM)",
+              "Any time"
+            ],
+            "shuffle": false
+          }
+        }
+      }
+    }
+  ]
+} 
