@@ -1,29 +1,115 @@
-// Video mute/unmute functionality
+// Video/YT mute/unmute functionality
 let isMuted = false
-const video = document.getElementById('vslVideo')
+let ytPlayerInstance = null
+const nativeVideo = document.getElementById('vslVideo')
+const ytPlayerContainer = document.getElementById('ytPlayer')
 const muteButton = document.getElementById('muteButton')
 const muteIcon = document.getElementById('muteIcon')
 
-if (video && muteButton && muteIcon) {
-  // Set initial state to unmuted
-  video.muted = false
+function setYouTubeVideo (youtubeUrlOrId) {
+  if (!ytPlayerContainer) return
+  // Accept full URL or raw ID
+  const idMatch = (youtubeUrlOrId || '').match(
+    /(?:v=|\.be\/|embed\/)([A-Za-z0-9_-]{11})/
+  )
+  const videoId = idMatch ? idMatch[1] : youtubeUrlOrId
+  const src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&playsinline=1&rel=0&modestbranding=1&controls=0&autoplay=1&mute=0&fs=0&disablekb=1&iv_load_policy=3`
+  ytPlayerContainer.innerHTML = `<iframe id="ytIframe" src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+}
+
+function getYouTubeIframe () {
+  return document.getElementById('ytIframe')
+}
+
+function postYouTubeMessage (action, value) {
+  const iframe = getYouTubeIframe()
+  if (!iframe) return
+  iframe.contentWindow?.postMessage(
+    JSON.stringify({
+      event: 'command',
+      func: action,
+      args: value ? [value] : []
+    }),
+    '*'
+  )
+}
+
+if ((nativeVideo || ytPlayerContainer) && muteButton && muteIcon) {
+  // UI shows sound ON by default; YouTube may start muted due to autoplay policy
+  isMuted = ytPlayerContainer ? true : false
   muteIcon.className = 'fas fa-volume-up'
   muteButton.classList.remove('muted')
 
   muteButton.addEventListener('click', function () {
-    if (isMuted) {
-      video.muted = false
-      muteIcon.className = 'fas fa-volume-up'
-      muteButton.classList.remove('muted')
-      isMuted = false
-    } else {
-      video.muted = true
-      muteIcon.className = 'fas fa-volume-mute'
-      muteButton.classList.add('muted')
-      isMuted = true
+    isMuted = !isMuted
+    if (nativeVideo) {
+      nativeVideo.muted = isMuted
+      if (!isMuted) nativeVideo.play?.().catch(() => {})
     }
+    if (ytPlayerContainer && getYouTubeIframe()) {
+      if (isMuted) {
+        postYouTubeMessage('mute')
+      } else {
+        postYouTubeMessage('unMute')
+        postYouTubeMessage('playVideo')
+      }
+    }
+    muteIcon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'
+    muteButton.classList.toggle('muted', isMuted)
   })
 }
+
+// If you provide a YouTube link, call this after DOM is ready, e.g.:
+// setYouTubeVideo('https://www.youtube.com/watch?v=VIDEO_ID')
+
+document.addEventListener('DOMContentLoaded', function () {
+  const ytContainer = document.getElementById('ytPlayer')
+  if (ytContainer) {
+    const providedUrl = ytContainer.getAttribute('data-youtube-url')
+    if (providedUrl) {
+      setYouTubeVideo(providedUrl)
+      // Start muted for autoplay reliability, then request unmute+play on first interaction
+      const primePlay = () => {
+        postYouTubeMessage('playVideo')
+        postYouTubeMessage('unMute')
+        isMuted = false
+        muteIcon.className = 'fas fa-volume-up'
+        muteButton.classList.remove('muted')
+        window.removeEventListener('click', primePlayOnce)
+        window.removeEventListener('touchstart', primePlayOnce)
+      }
+      const primePlayOnce = () => {
+        setTimeout(primePlay, 0)
+      }
+      // Retry a few times in case the iframe is late
+      setTimeout(() => postYouTubeMessage('playVideo'), 300)
+      setTimeout(() => postYouTubeMessage('playVideo'), 1200)
+      // Bind one-time user gesture to unmute and play with sound
+      window.addEventListener('click', primePlayOnce, { once: true })
+      window.addEventListener('touchstart', primePlayOnce, { once: true })
+    }
+  }
+  if (nativeVideo) {
+    nativeVideo.muted = true
+    nativeVideo
+      .play?.()
+      .then(() => {
+        // wait for user gesture to unmute
+        const unmuteNative = () => {
+          nativeVideo.muted = false
+          isMuted = false
+          muteIcon.className = 'fas fa-volume-up'
+          muteButton.classList.remove('muted')
+          window.removeEventListener('click', unmuteNativeOnce)
+          window.removeEventListener('touchstart', unmuteNativeOnce)
+        }
+        const unmuteNativeOnce = () => unmuteNative()
+        window.addEventListener('click', unmuteNativeOnce, { once: true })
+        window.addEventListener('touchstart', unmuteNativeOnce, { once: true })
+      })
+      .catch(() => {})
+  }
+})
 
 // Smooth scroll to form
 function scrollToForm () {
