@@ -124,7 +124,7 @@ function scrollToForm () {
 
 // Open Telegram Chat Function
 function openTelegramChat () {
-  const telegramUsername = 'Chatkix'
+  const telegramUsername = 'Kiiiixa'
   const message = 'Hi! I want to join the elite trading community.'
 
   // Check if user is on mobile
