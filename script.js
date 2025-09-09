@@ -13,7 +13,7 @@ function setYouTubeVideo (youtubeUrlOrId) {
     /(?:v=|\.be\/|embed\/)([A-Za-z0-9_-]{11})/
   )
   const videoId = idMatch ? idMatch[1] : youtubeUrlOrId
-  const src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&playsinline=1&rel=0&modestbranding=1&controls=0&autoplay=1&mute=0&fs=0&disablekb=1&iv_load_policy=3`
+  const src = `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&playsinline=1&rel=0&modestbranding=1&controls=0&autoplay=1&mute=0&fs=0&disablekb=1&iv_load_policy=3`
   ytPlayerContainer.innerHTML = `<iframe id="ytIframe" src="${src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
 }
 
@@ -65,7 +65,9 @@ if ((nativeVideo || ytPlayerContainer) && muteButton && muteIcon) {
 document.addEventListener('DOMContentLoaded', function () {
   const ytContainer = document.getElementById('ytPlayer')
   if (ytContainer) {
-    const providedUrl = ytContainer.getAttribute('data-youtube-url')
+    const providedUrl =
+      ytContainer.getAttribute('data-youtube-url') ||
+      'https://youtu.be/LVoeACCTJBA'
     if (providedUrl) {
       setYouTubeVideo(providedUrl)
       // Start muted for autoplay reliability, then request unmute+play on first interaction
@@ -892,6 +894,26 @@ style.textContent = `
     
     .cursor-trail {
         mix-blend-mode: screen;
+    }
+    
+    /* Visually cover YouTube corner branding without blocking clicks */
+    #ytPlayer {
+        position: relative;
+        overflow: hidden;
+    }
+    #ytPlayer iframe {
+        width: 100%;
+        height: 100%;
+    }
+    #ytPlayer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 120px;
+        height: 60px;
+        background: linear-gradient(to left, rgba(0,0,0,0.6), rgba(0,0,0,0));
+        pointer-events: none;
     }
 `
 document.head.appendChild(style)
