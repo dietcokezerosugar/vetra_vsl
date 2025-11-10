@@ -126,50 +126,13 @@ function scrollToForm () {
 
 // Open Telegram Chat Function
 function openTelegramChat () {
-  const telegramUsername = 'Kiiiixa'
-  const message = 'Hi! I want to join the elite trading community.'
-
-  // Check if user is on mobile
-  const isMobile =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    )
-
-  let telegramUrl
-
-  if (isMobile) {
-    // Mobile: Open Telegram app directly
-    telegramUrl = `tg://msg?to=${telegramUsername}&text=${encodeURIComponent(
-      message
-    )}`
-
-    // Fallback to web version if app is not installed
-    setTimeout(() => {
-      window.open(
-        `https://t.me/${telegramUsername}?start=${encodeURIComponent(message)}`,
-        '_blank'
-      )
-    }, 1000)
-  } else {
-    // Desktop: Open web version
-    telegramUrl = `https://t.me/${telegramUsername}?start=${encodeURIComponent(
-      message
-    )}`
-  }
-
-  // Try to open Telegram
+  const telegramInviteLink = 'https://t.me/+KdfIMC3ygjE1ZGQ1'
   try {
-    window.open(telegramUrl, '_blank')
+    window.open(telegramInviteLink, '_blank')
   } catch (error) {
-    // Fallback to web version
-    window.open(
-      `https://t.me/${telegramUsername}?start=${encodeURIComponent(message)}`,
-      '_blank'
-    )
+    window.location.href = telegramInviteLink
   }
-
-  // Track the click (optional)
-  console.log('Telegram chat opened for:', telegramUsername)
+  console.log('Telegram invite link opened:', telegramInviteLink)
 }
 
 // Premium Scroll Transitions
